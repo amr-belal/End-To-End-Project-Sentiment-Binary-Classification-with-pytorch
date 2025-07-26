@@ -12,8 +12,27 @@ project/
 │ ├── predict.py ← Prediction logic
 │ ├── preprocessing.py ← Tokenization, cleaning, padding
 │ └── utils.py ← Dataset loaders, tokenizer helpers
+│ └── train.py ← training loop
+│ └── predict.py ←predictions 
+| 
 ├── model/
-│ └── sentiment_model.pt ← Trained LSTM model
+│ └── sentiment_model.pt ← Trained LSTM model => ipynb data
+|
+├── data/
+│ └── DataLoad.py ← loader
+|
+|
+├── scripts/
+│ └── build_vocab.py ←
+│ └── encode_text.py ← 
+| └── evaluate.py ←model base 
+|
+├── artifacts/
+│ └── sentiment_model.pt ←model base 
+│ └── test_data.pt ← test base data
+│ └── train_data.pt ← train base data 
+│ └── train_vocab.pt ← vocab of train data 
+|
 ├── requirements.txt ← All Python dependencies
 └── README.md ← Project documentation
 ```

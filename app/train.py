@@ -51,3 +51,40 @@ def train_model(vocab , pad_token , device):
     #save
     torch.save(model.state_dict(), "artifacts/sentiment_model.pt")
     print("✅ Model saved to: artifacts/sentiment_model.pt")
+    
+    
+    
+    
+    
+def evaluate_model(model_path , vocab , pad_token ,device):
+    BATCH_SIZE = 32
+    EMBEDDING_DIM = 100
+    HIDDEN_DIM = 128
+    OUTPUT_DIM = 2
+    
+    
+    pad_idx =vocab[pad_token]
+    vocab_size =  len(vocab)
+    
+    model = SentimentLSTM(vocab_size, EMBEDDING_DIM, HIDDEN_DIM, OUTPUT_DIM, pad_idx)
+    
+    model .load_state_dict(torch.load(model_path))
+    
+    model.eval()
+    
+    test_loader = get_dataloader("artifacts/test_dataset.pt", BATCH_SIZE, shuffle=False)
+    
+    correct = 0 
+    total = 0
+    
+    with torch.no_grad():
+        for batch in test_loader:
+            inputs, labels = batch 
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs) 
+            predictions = torch.argmax(outputs, dim=1)
+            correct += (predictions == labels).sum().item()
+            total += labels.size(0)
+            
+    accuracy = correct /total 
+    print(f"✅ Test Accuracy: {accuracy * 100:.2f}%")

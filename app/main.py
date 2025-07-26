@@ -20,3 +20,24 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # fast app 
 
+from fastapi  import FastAPI
+from pydantic import BaseModel
+from app.predcit import predict_statement
+
+
+app = FastAPI(title="Sentiment Analysis API" , )
+
+
+
+class InputText(BaseModel):
+    text :str 
+
+
+@app.get("/")
+def home():
+    return {"message": "Welcome to the Sentiment Analysis API"}
+
+
+@app.post("/predict")
+def get_prediction(input_text:InputText ):
+    return predict_statement(input_text.text)

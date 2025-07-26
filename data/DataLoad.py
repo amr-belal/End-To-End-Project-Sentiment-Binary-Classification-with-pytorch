@@ -10,3 +10,8 @@ def load_data_from_datasets(data_name  , splits_type):
 
 def load_data_pandas_csv(csv_path):
     return pd.read_csv(csv_path)
+
+
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

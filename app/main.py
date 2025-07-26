@@ -1,43 +1,55 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
-# import torch
-# from utils import load_vocab
-# from train import train_model
-
-# PAD_TOKEN = "<PAD>"
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# if __name__ == "__main__":
-#     vocab = load_vocab("artifacts/train_vocab.json")
-#     # train_model(vocab, PAD_TOKEN, device)    # train one time 
-#     # print("Model training completed.")
-    
-    
-
-
-# fast app 
 
 from fastapi  import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from app.predcit import predict_statement
+import uvicorn
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from predict import predict_statement
+
+# التحقق من وجود الموديل قبل التحميل
+model_path = "artifacts/sentiment_model.pt"
+if not os.path.exists(model_path):
+    print("❌ Model file not found!")
+    print("Please run: python train_model.py first")
+    print("Or check if the artifacts folder exists")
+
 
 
 app = FastAPI(title="Sentiment Analysis API" , )
 
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 
 class InputText(BaseModel):
     text :str 
 
 
-@app.get("/")
+@app.get("/health")
 def home():
     return {"message": "Welcome to the Sentiment Analysis API"}
 
 
+
 @app.post("/predict")
-def get_prediction(input_text:InputText ):
-    return predict_statement(input_text.text)
+def get_prediction(input_text: InputText):
+    sentiment= predict_statement(input_text.text)
+    
+    sentiment_label = "positive" if sentiment == 1 else "negative"
+    return {
+        "input": input_text.text,
+        "prediction": {
+            "sentiment": sentiment,
+          
+        }
+    }
+@app.get("/")
+def serve_frontend():
+    return FileResponse("frontend/home.html")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

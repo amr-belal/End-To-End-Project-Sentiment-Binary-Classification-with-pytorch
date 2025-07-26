@@ -10,6 +10,7 @@ def clean_text(text):
     return text.lower()
 
 def tokenize_text(text):
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
     return [word for word in text.split()]
 
 def build_vocab( text ):

@@ -14,6 +14,9 @@ from nltk.tokenize import word_tokenize
 #     if len(ids) < max_len:
 #         ids += [vocab['<PAD>']] * (max_len - len(ids))
 #     return ids
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # app/preprocessing.py

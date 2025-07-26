@@ -1,0 +1,9 @@
+numpy
+pandas
+torch
+datasets
+scikit-learn
+pydantic
+fastapi
+uvicorn
+torchtext

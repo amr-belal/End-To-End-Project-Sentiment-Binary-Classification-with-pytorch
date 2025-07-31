@@ -98,6 +98,12 @@ You can deploy this API on:
 
 ---
 
+## Run uvicorn
+```bash
+uvicorn app.main:app --reload
+```
+
+
 ## ✅`requirements.txt`
 
 ```txt
